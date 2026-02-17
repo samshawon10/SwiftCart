@@ -58,7 +58,98 @@
     </div>
   </header>
 
+<!-- Main Part -->
+ 
+  <main>
+    <section class="relative grid min-h-[72vh] place-items-center overflow-hidden text-center text-white" id="home">
+      <img src="./Assets/banner-image.png" class="absolute inset-0 h-full w-full object-cover" alt="" aria-hidden="true">
+      <div class="absolute inset-0 bg-gradient-to-r from-slate-900/80 to-slate-800/60"></div>
+      <div class="relative z-10 mx-auto w-[min(1120px,92%)]">
+        <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl">Best Collection For You</h1>
+        <p class="mx-auto mt-3 max-w-2xl text-base text-slate-100 sm:text-lg">Shop premium fashion, electronics, and accessories at competitive prices with fast delivery and secure checkout.</p>
+        <button class="mt-8 rounded-xl bg-gradient-to-r from-orange-500 to-rose-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/30 transition hover:-translate-y-0.5 hover:from-orange-600 hover:to-rose-600" id="shopNow" type="button">Shop Now</button>
+      </div>
+    </section>
 
+    <section class="py-20" id="about">
+      <div class="mx-auto w-[min(1120px,92%)]">
+        <div class="mx-auto max-w-2xl text-center">
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-teal-700">Why Choose Us</p>
+          <h2 class="mt-2 font-display text-3xl text-slate-900 sm:text-4xl">Shopping That Feels Effortless</h2>
+          <p class="mt-2 text-slate-600">SwiftCart combines trusted products, transparent pricing, and reliable support.</p>
+        </div>
+
+        <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-card transition hover:-translate-y-1 hover:shadow-glow">
+            <div class="mb-3 inline-grid h-11 w-11 place-items-center rounded-xl bg-orange-100 text-orange-700" aria-hidden="true">
+              <i class="fa-solid fa-truck-fast" aria-hidden="true"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-slate-900">Fast Delivery</h3>
+            <p class="mt-1 text-sm text-slate-600">Quick order processing and dependable shipping.</p>
+          </article>
+
+          <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-card transition hover:-translate-y-1 hover:shadow-glow">
+            <div class="mb-3 inline-grid h-11 w-11 place-items-center rounded-xl bg-orange-100 text-orange-700" aria-hidden="true">
+              <i class="fa-solid fa-headset" aria-hidden="true"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-slate-900">24/7 Support</h3>
+            <p class="mt-1 text-sm text-slate-600">Support team ready to help with product and order issues.</p>
+          </article>
+
+          <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-card transition hover:-translate-y-1 hover:shadow-glow">
+            <div class="mb-3 inline-grid h-11 w-11 place-items-center rounded-xl bg-orange-100 text-orange-700" aria-hidden="true">
+              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-slate-900">Secure Payment</h3>
+            <p class="mt-1 text-sm text-slate-600">Safe payment flow and privacy-focused transaction handling.</p>
+          </article>
+
+          <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-card transition hover:-translate-y-1 hover:shadow-glow">
+            <div class="mb-3 inline-grid h-11 w-11 place-items-center rounded-xl bg-orange-100 text-orange-700" aria-hidden="true">
+              <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-slate-900">Easy Returns</h3>
+            <p class="mt-1 text-sm text-slate-600">Straightforward return policy for a worry-free purchase.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20">
+      <div class="mx-auto w-[min(1120px,92%)]">
+        <div class="mx-auto max-w-2xl text-center">
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-teal-700">Top Rated</p>
+          <h2 class="mt-2 font-display text-3xl text-slate-900 sm:text-4xl">Trending Products</h2>
+          <p class="mt-2 text-slate-600">Top 3 products ranked by API rating.</p>
+        </div>
+        <div class="mt-5 flex items-center justify-center gap-3 text-slate-600" id="trendLoading">
+          <span class="h-5 w-5 animate-spin rounded-full border-[3px] border-slate-300 border-t-teal-500"></span>
+          <span>Loading trending products...</span>
+        </div>
+        <div class="mt-4 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3" id="trendingGrid" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="py-20" id="products">
+      <div class="mx-auto w-[min(1120px,92%)]">
+        <div class="mx-auto max-w-2xl text-center">
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-teal-700">Shop</p>
+          <h2 class="mt-2 font-display text-3xl text-slate-900 sm:text-4xl">Browse Products By Category</h2>
+          <p class="mt-2 text-slate-600">Select a category to load products from the API.</p>
+        </div>
+
+        <div class="mt-6 flex flex-wrap items-center justify-center gap-2.5" id="categoryList" aria-label="Product categories"></div>
+
+        <div class="mt-4 flex items-center justify-center gap-3 text-slate-600" id="productLoading">
+          <span class="h-5 w-5 animate-spin rounded-full border-[3px] border-slate-300 border-t-teal-500"></span>
+          <span>Loading products...</span>
+        </div>
+
+        <div class="mt-4 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" id="productGrid" aria-live="polite"></div>
+      </div>
+    </section>
+
+  </main>
 
 </body>
 </html>
