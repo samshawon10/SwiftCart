@@ -594,5 +594,14 @@ init();
   function money(value) {
     return `$${(Number(value) || 0).toFixed(2)}`;
   }
+// use this part and solve the error (use AI to solve the error).
+   function escapeHTML(value) {
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
 
 })();
