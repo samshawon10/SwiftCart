@@ -151,5 +151,45 @@
 
   </main>
 
+  <!--Footer Part -->
+  <footer class="bg-slate-900 py-12 text-slate-300" id="contact">
+    <div class="mx-auto w-[min(1120px,92%)]">
+      <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_1.3fr]">
+        <div>
+          <p class="font-display text-3xl text-white">SwiftCart</p>
+          <p class="mt-2 text-sm text-slate-400">Quality products, trusted checkout, and better online shopping.</p>
+        </div>
+        <div>
+          <h4 class="text-base font-semibold text-white">Quick Links</h4>
+          <ul class="mt-2 space-y-1.5 text-sm">
+            <li><a class="transition hover:text-white" href="#home">Home</a></li>
+            <li><a class="transition hover:text-white" href="#products">Products</a></li>
+            <li><a class="transition hover:text-white" href="#about">About</a></li>
+            <li><a class="transition hover:text-white" href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-base font-semibold text-white">Social Links</h4>
+          <ul class="mt-2 space-y-1.5 text-sm">
+            <li><a class="transition hover:text-white" href="https://facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+            <li><a class="transition hover:text-white" href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+            <li><a class="transition hover:text-white" href="https://twitter.com" target="_blank" rel="noopener noreferrer">Twitter</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-base font-semibold text-white">Newsletter</h4>
+          <p class="mt-2 text-sm text-slate-400">Get updates on new arrivals and special offers.</p>
+          <form id="newsletterForm" class="mt-3 flex flex-col gap-2 sm:flex-row lg:flex-col">
+            <input id="newsletterEmail" class="w-full rounded-xl border border-slate-500 bg-slate-900/40 px-3.5 py-2.5 text-sm text-white outline-none transition placeholder:text-slate-400 focus:border-orange-400 focus:ring-2 focus:ring-orange-300/40" type="email" placeholder="Enter your email" required>
+            <button class="rounded-xl bg-gradient-to-r from-orange-500 to-rose-500 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-orange-500/25 transition hover:from-orange-600 hover:to-rose-600" type="submit">Subscribe</button>
+          </form>
+          <p class="mt-2 min-h-[20px] text-sm text-emerald-300" id="newsletterFeedback"></p>
+        </div>
+      </div>
+      <div class="mt-6 border-t border-slate-700 pt-4 text-center text-sm text-slate-400">&copy; 2026 SwiftCart. All rights reserved.</div>
+    </div>
+  </footer>
+
+
 </body>
 </html>
