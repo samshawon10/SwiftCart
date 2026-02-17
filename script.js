@@ -351,4 +351,248 @@ init();
     }
   }
 
-    })();
+  
+  function closeModal() {
+    if (ui.modal.classList.contains("hidden")) return;
+    ui.modal.classList.add("hidden");
+    ui.modal.setAttribute("aria-hidden", "true");
+    syncBodyLock();
+  }
+
+  function openCart() {
+    ui.cartDrawer.classList.remove("hidden");
+    ui.cartDrawer.setAttribute("aria-hidden", "false");
+
+    requestAnimationFrame(() => {
+      ui.cartPanel.classList.remove("translate-x-full");
+      ui.cartPanel.classList.add("translate-x-0");
+    });
+
+    syncBodyLock();
+  }
+
+  function closeCart() {
+    if (ui.cartDrawer.classList.contains("hidden")) return;
+
+    ui.cartPanel.classList.remove("translate-x-0");
+    ui.cartPanel.classList.add("translate-x-full");
+    ui.cartDrawer.setAttribute("aria-hidden", "true");
+
+    setTimeout(() => {
+      ui.cartDrawer.classList.add("hidden");
+      syncBodyLock();
+    }, 260);
+  }
+
+  function syncBodyLock() {
+    const modalOpen = !ui.modal.classList.contains("hidden");
+    const cartOpen = !ui.cartDrawer.classList.contains("hidden");
+    document.body.classList.toggle("overflow-hidden", modalOpen || cartOpen);
+  }
+
+  function addToCart(product) {
+    const found = state.cart.find((item) => item.id === product.id);
+
+    if (found) {
+      found.qty += 1;
+    } else {
+      state.cart.push({
+        id: product.id,
+        title: product.title,
+        image: product.image,
+        price: Number(product.price) || 0,
+        qty: 1
+      });
+    }
+
+    saveCartToStorage();
+    updateCartCount();
+    renderCart();
+  }
+
+  function buyNow(product) {
+    addToCart(product);
+    closeModal();
+    openCart();
+  }
+
+  function removeFromCart(productId) {
+    state.cart = state.cart.filter((item) => item.id !== productId);
+    saveCartToStorage();
+    updateCartCount();
+    renderCart();
+  }
+
+  function changeCartQuantity(productId, delta) {
+    const item = state.cart.find((cartItem) => cartItem.id === productId);
+    if (!item) return;
+
+    const nextQty = item.qty + delta;
+    if (nextQty <= 0) {
+      removeFromCart(productId);
+      return;
+    }
+
+    item.qty = nextQty;
+    saveCartToStorage();
+    updateCartCount();
+    renderCart();
+  }
+
+  function renderCart() {
+    if (!state.cart.length) {
+      ui.cartItems.innerHTML = `
+        <div class="rounded-2xl border border-dashed border-slate-300 bg-white px-4 py-7 text-center">
+          <p class="text-sm font-semibold text-slate-800">Your cart is empty</p>
+          <p class="mt-1 text-xs text-slate-500">Add products from the catalog to see them here.</p>
+        </div>
+      `;
+      updateCartSummary(0, 0);
+      return;
+    }
+
+    let totalItems = 0;
+    let totalPrice = 0;
+
+    ui.cartItems.innerHTML = state.cart
+      .map((item) => {
+        const lineTotal = item.price * item.qty;
+        totalItems += item.qty;
+        totalPrice += lineTotal;
+
+        const minusDisabled = item.qty <= 1;
+        const minusClasses = minusDisabled
+          ? "rounded-md border border-slate-200 bg-slate-100 px-2 py-1 text-xs font-bold text-slate-300 cursor-not-allowed"
+          : "rounded-md border border-slate-200 bg-white px-2 py-1 text-xs font-bold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50";
+
+        return `
+          <article class="grid grid-cols-[72px_1fr_auto] items-center gap-2.5 rounded-2xl border border-slate-200 bg-white p-2.5 shadow-sm">
+            <img class="h-[72px] w-[72px] rounded-xl border border-slate-200 bg-white p-2 object-contain" src="${escapeHTML(item.image)}" alt="${escapeHTML(item.title)}">
+            <div>
+              <h4 class="line-clamp-2 text-sm font-semibold text-slate-800">${escapeHTML(truncate(item.title, 44))}</h4>
+              <p class="text-[11px] text-slate-500">Unit Price: ${money(item.price)}</p>
+              <div class="mt-1 inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-slate-50 p-1">
+                <button class="${minusClasses}" type="button" data-decrease="${item.id}" ${minusDisabled ? "disabled" : ""}><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
+                <span class="min-w-[24px] text-center text-xs font-semibold text-slate-700">${item.qty}</span>
+                <button class="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs font-bold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50" type="button" data-increase="${item.id}"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+              </div>
+              <p class="text-xs font-semibold text-slate-700">Subtotal: ${money(lineTotal)}</p>
+            </div>
+            <button class="rounded-lg bg-rose-50 px-2.5 py-1.5 text-xs font-semibold text-rose-600 transition hover:bg-rose-100" type="button" data-remove="${item.id}">Remove</button>
+          </article>
+        `;
+      })
+      .join("");
+
+    updateCartSummary(totalItems, totalPrice);
+  }
+
+  function updateCartCount() {
+    const count = state.cart.reduce((sum, item) => sum + item.qty, 0);
+    ui.cartCount.textContent = String(count);
+  }
+
+  function updateCartSummary(itemCount, subtotal) {
+    const amount = money(subtotal);
+    ui.cartItemsCount.textContent = String(itemCount);
+    ui.cartSubtotal.textContent = amount;
+    ui.cartTotal.textContent = amount;
+  }
+
+  function cacheProducts(products) {
+    if (!Array.isArray(products)) return;
+    products.forEach((product) => {
+      if (product && typeof product.id === "number") {
+        state.productCache.set(product.id, product);
+      }
+    });
+  }
+
+  function setLoading(target, loading) {
+    target.classList.toggle("hidden", !loading);
+  }
+
+  function messageCard(text) {
+    return `<p class="col-span-full rounded-2xl border border-dashed border-slate-300 bg-white px-4 py-5 text-center text-sm text-slate-600">${escapeHTML(text)}</p>`;
+  }
+
+  function isMenuOpen() {
+    return !ui.navCenter.classList.contains("hidden");
+  }
+
+  function setMenuOpen(open) {
+    ui.navCenter.classList.toggle("hidden", !open);
+    ui.menuToggle.setAttribute("aria-expanded", open ? "true" : "false");
+    ui.menuIconOpen.classList.toggle("hidden", open);
+    ui.menuIconClose.classList.toggle("hidden", !open);
+  }
+
+  function toggleMenu() {
+    setMenuOpen(!isMenuOpen());
+  }
+
+  function closeMenu() {
+    setMenuOpen(false);
+  }
+
+  async function fetchJSON(url) {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Request failed");
+    return response.json();
+  }
+
+  function readCartFromStorage() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return [];
+
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return [];
+
+      return parsed
+        .map((item) => ({
+          id: Number(item.id),
+          title: String(item.title || ""),
+          image: String(item.image || ""),
+          price: Number(item.price) || 0,
+          qty: Math.max(1, Number(item.qty) || 1)
+        }))
+        .filter((item) => Number.isFinite(item.id));
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function saveCartToStorage() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state.cart));
+  }
+
+  function getRating(product) {
+    const rating = product && product.rating && Number(product.rating.rate);
+    return Number.isFinite(rating) ? rating : 0;
+  }
+
+  function getRatingCount(product) {
+    const count = product && product.rating && Number(product.rating.count);
+    return Number.isFinite(count) ? count : 0;
+  }
+
+  function starsHTML(rate) {
+    const rounded = Math.round(Number(rate) || 0);
+    let stars = "";
+    for (let i = 1; i <= 5; i += 1) {
+      stars += `<i class="fa-solid fa-star ${i <= rounded ? "text-amber-400" : "text-slate-300"}" aria-hidden="true"></i>`;
+    }
+    return stars;
+  }
+
+  function truncate(text, maxLength) {
+    if (!text || text.length <= maxLength) return text || "";
+    return `${text.slice(0, maxLength - 3)}...`;
+  }
+
+  function money(value) {
+    return `$${(Number(value) || 0).toFixed(2)}`;
+  }
+
+})();
