@@ -34,3 +34,8 @@ Scope মানে ভেরিয়েবল কোথায় accessible হবে
 - **Global Scope:** যে ভেরিয়েবল global এ ডিক্লেয়ার করা হয়, প্রোগ্রামের প্রায় সব জায়গা থেকে ব্যবহার করা যায়।
 - **Function Scope:** `var` দিয়ে function এর ভিতরে ডিক্লেয়ার করা ভেরিয়েবল শুধু ওই function এর ভিতরেই কাজ করে।
 - **Block Scope:** `let`/`const` দিয়ে `{}` block এর ভিতরে ডিক্লেয়ার করা ভেরিয়েবল শুধুই ওই block এ ব্যবহার করা যায় (if, for, while ইত্যাদি)।
+
+
+***Live Link :** https://shswiftcart.netlify.app/
+
+**GitHub Repository:** https://github.com/samshawon10/SwiftCart
